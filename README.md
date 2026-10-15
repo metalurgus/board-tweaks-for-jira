@@ -55,10 +55,8 @@ a screenshot of your board's toolbar helps a lot.
 
 ## Support
 
-If the extension saves you time, you can support its development:
-
-- **Ko-fi** (card or PayPal, from anywhere): *link coming soon*
-- **monobank jar** (handy from Ukraine): *link coming soon*
+If the extension saves you time, you can support its development through
+the [monobank jar](https://send.monobank.ua/jar/AQ7QMzsSpt).
 
 ## License
 

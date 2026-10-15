@@ -1,11 +1,11 @@
 (async () => {
   'use strict';
 
-  // TODO: fill in. Each donation link shows in the popup's footer only once
-  // its URL is set, and the "Support development" line only with at least one.
+  // Each donation link shows in the popup's footer only once its URL is set,
+  // and the "Support development" line only with at least one.
   const DONATE_URLS = {
     kofi: '', // https://ko-fi.com/<name>
-    monobank: '', // https://send.monobank.ua/jar/<id>
+    monobank: 'https://send.monobank.ua/jar/AQ7QMzsSpt',
   };
 
   const { MIN_FONT_SIZE, MAX_FONT_SIZE, clampFontSize } = jcfSettings;
