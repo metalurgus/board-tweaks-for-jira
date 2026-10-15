@@ -165,6 +165,26 @@ html.jcf-compact-search .jcf-search-slot:not(:focus-within):has(input:placeholde
   min-width: 0 !important;
 }
 
+/* While the ••• menu is open, each tucked icon lies invisibly over its menu
+   item (toolbar.js sets the box) so a real click reaches Jira's own button. */
+.jcf-tucked.jcf-overlay {
+  top: var(--jcf-overlay-top) !important;
+  left: var(--jcf-overlay-left) !important;
+  right: auto !important;
+  width: var(--jcf-overlay-width) !important;
+  max-width: none !important; /* Jira caps it at the (narrow) group's width */
+  height: var(--jcf-overlay-height) !important;
+  z-index: 2147483000 !important;
+  pointer-events: auto !important;
+}
+
+.jcf-overlay button {
+  position: absolute !important;
+  inset: 0 !important;
+  width: auto !important;
+  height: auto !important;
+}
+
 .jcf-menu-section {
   border-bottom: 1px solid var(--ds-border, #091e4224);
   margin-bottom: 4px;
@@ -205,7 +225,8 @@ html.jcf-compact-search .jcf-search-slot:not(:focus-within):has(input:placeholde
   cursor: pointer;
 }
 
-.jcf-menu-item:hover {
+.jcf-menu-item:hover,
+.jcf-menu-item.jcf-hover {
   background: var(--ds-background-neutral-subtle-hovered, #0515240f);
 }
 

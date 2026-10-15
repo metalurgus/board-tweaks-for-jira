@@ -3,8 +3,8 @@
 // - compactToolbar: tucks the icon buttons (Sprint details, Sprint insights,
 //   View settings, ...) into the "More board view actions" (•••) menu. They
 //   stay in the DOM, invisibly stacked behind •••, so popups they open still
-//   anchor next to it. When the ••• menu opens we add a menu item per icon
-//   that clicks the hidden original.
+//   anchor next to it. When the ••• menu opens we add a menu item per icon,
+//   with the hidden original laid invisibly over it to take the click.
 // - compactSearch: shrinks "Search board" to an icon while it's empty and
 //   unfocused (CSS in content.css; here we only tag the elements).
 (() => {
@@ -18,6 +18,8 @@
   const TUCKED_CLASS = 'jcf-tucked';
   const MENU_CLASS = 'jcf-more-menu';
   const MENU_SECTION_CLASS = 'jcf-menu-section';
+  const OVERLAY_CLASS = 'jcf-overlay'; // a tucked button laid over its menu item
+  const HOVER_CLASS = 'jcf-hover'; // on a menu item while its overlay is hovered
 
   const SEARCH_FIELD_SELECTOR = '[data-testid="filter-refinement.ui.search-field-container"]';
   const SEARCH_FIELD_CLASS = 'jcf-search-field';
@@ -79,6 +81,7 @@
   function applyToolbar() {
     const toolbar = findToolbar();
     if (!enabled || !toolbar) {
+      stopOverlay();
       document.querySelectorAll(`.${TUCKED_CLASS}`).forEach((el) => el.classList.remove(TUCKED_CLASS));
       document.querySelectorAll(`.${GROUP_CLASS}`).forEach((el) => el.classList.remove(GROUP_CLASS));
       return;
@@ -131,6 +134,70 @@
     }, 50);
   }
 
+  // --- real clicks on tucked buttons ----------------------------------------------
+
+  // Jira doesn't treat a scripted click like a real one everywhere: opened
+  // with button.click(), the View settings panel stays empty the first time.
+  // So while the ••• menu is open, each tucked button lies invisibly on top of
+  // its menu item and takes the mouse click itself. The item's own click
+  // handler (pressTucked) is left for keyboard use.
+  let overlay = null; // { menu, group, pairs: [{ item, slot }], abort, pressing }
+
+  function startOverlay(menu, group, pairs) {
+    stopOverlay();
+    if (!pairs.length) return;
+    const abort = new AbortController();
+    overlay = { menu, group, pairs, abort, pressing: false };
+    for (const { item, slot } of pairs) {
+      slot.classList.add(OVERLAY_CLASS);
+      const on = (type, fn) => slot.addEventListener(type, fn, { signal: abort.signal });
+      on('pointerenter', () => item.classList.add(HOVER_CLASS));
+      on('pointerleave', () => item.classList.remove(HOVER_CLASS));
+      on('pointerdown', () => {
+        overlay.pressing = true;
+      });
+    }
+    // The menu closes on pointerdown outside it; keep the button in place until
+    // the click that follows has landed on it.
+    const release = () => setTimeout(() => overlay && (overlay.pressing = false));
+    window.addEventListener('pointerup', release, { capture: true, signal: abort.signal });
+    window.addEventListener('pointercancel', release, { capture: true, signal: abort.signal });
+    positionOverlay();
+  }
+
+  // Follows the menu every frame (it's positioned, and can move, after we fill it).
+  function positionOverlay() {
+    if (!overlay) return;
+    const { menu, group, pairs, pressing } = overlay;
+    if (!menu.isConnected) {
+      if (!pressing) {
+        stopOverlay();
+        return;
+      }
+    } else {
+      const origin = group.getBoundingClientRect();
+      for (const { item, slot } of pairs) {
+        const rect = item.getBoundingClientRect();
+        slot.style.setProperty('--jcf-overlay-top', `${rect.top - origin.top}px`);
+        slot.style.setProperty('--jcf-overlay-left', `${rect.left - origin.left}px`);
+        slot.style.setProperty('--jcf-overlay-width', `${rect.width}px`);
+        slot.style.setProperty('--jcf-overlay-height', `${rect.height}px`);
+      }
+    }
+    requestAnimationFrame(positionOverlay);
+  }
+
+  function stopOverlay() {
+    if (!overlay) return;
+    overlay.abort.abort();
+    for (const { item, slot } of overlay.pairs) {
+      item.classList.remove(HOVER_CLASS);
+      slot.classList.remove(OVERLAY_CLASS);
+      for (const prop of ['top', 'left', 'width', 'height']) slot.style.removeProperty(`--jcf-overlay-${prop}`);
+    }
+    overlay = null;
+  }
+
   // Styled in content.css to match Jira's menu items. (Copying Jira's own item
   // markup isn't reliable: the menu often renders its items only after a
   // network round trip.)
@@ -177,11 +244,22 @@
     const section = document.createElement('div');
     section.setAttribute('role', 'group');
     section.className = MENU_SECTION_CLASS;
-    section.append(...sources.map(buildMenuItem));
+    const slots = iconSlots(toolbar);
+    const pairs = [];
+    section.append(
+      ...sources.map((source) => {
+        const item = buildMenuItem(source);
+        const slot = slots.find((s) => s.contains(source));
+        // Only a slot holding just this button can stand in for the item.
+        if (!item.disabled && slot?.querySelectorAll('button').length === 1) pairs.push({ item, slot });
+        return item;
+      })
+    );
 
     const firstSection = menu.querySelector('[data-section]') || menu.firstElementChild;
     if (firstSection) firstSection.before(section);
     else menu.append(section);
+    startOverlay(menu, toolbar.group, pairs);
   }
 
   // --- wiring ------------------------------------------------------------------
