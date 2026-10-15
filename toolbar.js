@@ -20,6 +20,7 @@
   const MENU_SECTION_CLASS = 'jcf-menu-section';
   const OVERLAY_CLASS = 'jcf-overlay'; // a tucked button laid over its menu item
   const HOVER_CLASS = 'jcf-hover'; // on a menu item while its overlay is hovered
+  const MAX_PRESS_MS = 1000; // longest a press keeps the overlay after the menu closes
 
   const SEARCH_FIELD_SELECTOR = '[data-testid="filter-refinement.ui.search-field-container"]';
   const SEARCH_FIELD_CLASS = 'jcf-search-field';
@@ -147,34 +148,36 @@
     stopOverlay();
     if (!pairs.length) return;
     const abort = new AbortController();
-    overlay = { menu, group, pairs, abort, pressing: false };
+    const current = { menu, group, pairs, abort, pressing: false };
+    overlay = current;
+    // The menu closes on pointerdown outside it; keep the buttons in place until
+    // the click that follows has landed. Capped, in case the release is never
+    // seen (e.g. the mouse is let go outside the window).
+    const release = () =>
+      setTimeout(() => {
+        current.pressing = false;
+        checkOverlay();
+      });
     for (const { item, slot } of pairs) {
       slot.classList.add(OVERLAY_CLASS);
       const on = (type, fn) => slot.addEventListener(type, fn, { signal: abort.signal });
       on('pointerenter', () => item.classList.add(HOVER_CLASS));
       on('pointerleave', () => item.classList.remove(HOVER_CLASS));
       on('pointerdown', () => {
-        overlay.pressing = true;
+        current.pressing = true;
+        setTimeout(release, MAX_PRESS_MS);
       });
     }
-    // The menu closes on pointerdown outside it; keep the button in place until
-    // the click that follows has landed on it.
-    const release = () => setTimeout(() => overlay && (overlay.pressing = false));
     window.addEventListener('pointerup', release, { capture: true, signal: abort.signal });
     window.addEventListener('pointercancel', release, { capture: true, signal: abort.signal });
-    positionOverlay();
+    positionOverlay(current);
   }
 
   // Follows the menu every frame (it's positioned, and can move, after we fill it).
-  function positionOverlay() {
-    if (!overlay) return;
-    const { menu, group, pairs, pressing } = overlay;
-    if (!menu.isConnected) {
-      if (!pressing) {
-        stopOverlay();
-        return;
-      }
-    } else {
+  function positionOverlay(current) {
+    if (overlay !== current) return;
+    const { menu, group, pairs } = current;
+    if (menu.isConnected) {
       const origin = group.getBoundingClientRect();
       for (const { item, slot } of pairs) {
         const rect = item.getBoundingClientRect();
@@ -184,7 +187,14 @@
         slot.style.setProperty('--jcf-overlay-height', `${rect.height}px`);
       }
     }
-    requestAnimationFrame(positionOverlay);
+    requestAnimationFrame(() => positionOverlay(current));
+  }
+
+  // Puts the buttons back once the menu is gone. Called on DOM changes and on
+  // release rather than from the frame loop, which Chrome can slow to a crawl
+  // in a window that isn't visible.
+  function checkOverlay() {
+    if (overlay && !overlay.pressing && !overlay.menu.isConnected) stopOverlay();
   }
 
   function stopOverlay() {
@@ -274,6 +284,7 @@
 
     let applyScheduled = false;
     new MutationObserver(() => {
+      checkOverlay();
       // Fill the menu straight away so its items don't pop in late.
       injectMenuItems();
       if (applyScheduled) return;
