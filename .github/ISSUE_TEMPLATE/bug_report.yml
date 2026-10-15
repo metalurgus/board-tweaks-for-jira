@@ -1,0 +1,62 @@
+name: Bug report
+description: Something doesn't work or looks wrong on your Jira board.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! Jira's interface changes often and differs between sites, so the details below help a lot.
+        Please remove anything confidential (issue keys, names, filter names) from screenshots and logs.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Screenshot
+      description: A screenshot of the board's toolbar (search, filters, the buttons on the right) with the problem visible.
+  - type: input
+    id: extension-version
+    attributes:
+      label: Extension version
+      description: Shown in chrome://extensions.
+      placeholder: "1.3.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: board-type
+    attributes:
+      label: Board type
+      description: Company-managed boards have "Custom filters"; team-managed boards don't.
+      options:
+        - Company-managed (Scrum)
+        - Company-managed (Kanban)
+        - Team-managed
+        - Not sure
+    validations:
+      required: true
+  - type: input
+    id: jira-language
+    attributes:
+      label: Jira language
+      placeholder: English
+  - type: textarea
+    id: settings
+    attributes:
+      label: Extension settings
+      description: Which switches are on in the extension's popup?
+      placeholder: |
+        Show filters as buttons: on
+        Keep filters on one line: on
+        Shrink search to an icon: on
+        Move toolbar icons into ••• menu: off
+  - type: textarea
+    id: console
+    attributes:
+      label: Console messages
+      description: Open DevTools (F12) → Console on the board and paste any lines starting with `[jira-custom-filters]`.
+      render: text

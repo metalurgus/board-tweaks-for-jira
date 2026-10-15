@@ -1,7 +1,17 @@
 (async () => {
   'use strict';
 
+  // TODO: set to your Ko-fi / GitHub Sponsors / Buy Me a Coffee page; the
+  // popup's "Support development" link stays hidden while this is empty.
+  const DONATE_URL = '';
+
   const { MIN_FONT_SIZE, MAX_FONT_SIZE, clampFontSize } = jcfSettings;
+
+  if (DONATE_URL) {
+    const donate = document.getElementById('donate');
+    donate.href = DONATE_URL;
+    donate.hidden = false;
+  }
 
   const expandedInput = document.getElementById('expanded');
   const compactToolbarInput = document.getElementById('compact-toolbar');

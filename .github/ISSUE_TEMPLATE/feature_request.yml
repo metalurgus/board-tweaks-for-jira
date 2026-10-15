@@ -1,0 +1,21 @@
+name: Feature or styling request
+description: Suggest a new tweak, or a change to how something looks.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would you like?
+      description: Describe the tweak or the styling change. What part of the board does it affect?
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why?
+      description: What's awkward today, and how would this help?
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Screenshot or mock-up
+      description: Optional. A screenshot of the part of the board you mean, or a sketch of how it could look.
