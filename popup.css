@@ -207,3 +207,13 @@ footer a {
 footer a:hover {
   text-decoration: underline;
 }
+
+#donate {
+  color: var(--text-subtle);
+}
+
+/* "Ko-fi · monobank", with the dot only between links that are shown. */
+#donate a:not([hidden]) ~ a:not([hidden])::before {
+  content: "· ";
+  color: var(--text-subtle);
+}

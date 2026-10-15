@@ -56,7 +56,9 @@ a screenshot of your board's toolbar helps a lot.
 ## Support
 
 If the extension saves you time, you can support its development:
-*donation link coming soon*.
+
+- **Ko-fi** (card or PayPal, from anywhere): *link coming soon*
+- **monobank jar** (handy from Ukraine): *link coming soon*
 
 ## License
 

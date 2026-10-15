@@ -1,16 +1,21 @@
 (async () => {
   'use strict';
 
-  // TODO: set to your Ko-fi / GitHub Sponsors / Buy Me a Coffee page; the
-  // popup's "Support development" link stays hidden while this is empty.
-  const DONATE_URL = '';
+  // TODO: fill in. Each donation link shows in the popup's footer only once
+  // its URL is set, and the "Support development" line only with at least one.
+  const DONATE_URLS = {
+    kofi: '', // https://ko-fi.com/<name>
+    monobank: '', // https://send.monobank.ua/jar/<id>
+  };
 
   const { MIN_FONT_SIZE, MAX_FONT_SIZE, clampFontSize } = jcfSettings;
 
-  if (DONATE_URL) {
-    const donate = document.getElementById('donate');
-    donate.href = DONATE_URL;
-    donate.hidden = false;
+  for (const [key, url] of Object.entries(DONATE_URLS)) {
+    if (!url) continue;
+    const link = document.getElementById(`donate-${key}`);
+    link.href = url;
+    link.hidden = false;
+    document.getElementById('donate').hidden = false;
   }
 
   const expandedInput = document.getElementById('expanded');
