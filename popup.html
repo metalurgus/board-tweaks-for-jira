@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Jira Custom Filters</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <h1>Jira Custom Filters</h1>
+
+  <label class="row" for="expanded">
+    <span class="label">
+      Show filters as buttons
+      <span class="hint">Off brings back Jira's dropdown</span>
+    </span>
+    <input id="expanded" type="checkbox" role="switch">
+  </label>
+
+  <label class="row" for="single-row">
+    <span class="label">
+      Keep filters on one line
+      <span class="hint">Scroll sideways when they don't fit</span>
+    </span>
+    <input id="single-row" type="checkbox" role="switch">
+  </label>
+
+  <label class="row" for="compact-search">
+    <span class="label">
+      Shrink search to an icon
+      <span class="hint">Expands when you click it or while it has text</span>
+    </span>
+    <input id="compact-search" type="checkbox" role="switch">
+  </label>
+
+  <label class="row" for="compact-toolbar">
+    <span class="label">
+      Move toolbar icons into &bull;&bull;&bull; menu
+      <span class="hint">Sprint details, insights, view settings&hellip;</span>
+    </span>
+    <input id="compact-toolbar" type="checkbox" role="switch">
+  </label>
+
+  <div class="row">
+    <span class="label" id="size-label">Text size</span>
+    <div class="stepper" role="group" aria-labelledby="size-label">
+      <button id="size-down" type="button" aria-label="Decrease text size">&minus;</button>
+      <input id="size" type="number" step="1" aria-labelledby="size-label">
+      <span class="unit">px</span>
+      <button id="size-up" type="button" aria-label="Increase text size">+</button>
+    </div>
+  </div>
+
+  <div class="preview" aria-hidden="true">
+    <span class="chip">Android</span>
+    <span class="chip selected">iOS</span>
+    <span class="chip">QA</span>
+  </div>
+
+  <script src="settings.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

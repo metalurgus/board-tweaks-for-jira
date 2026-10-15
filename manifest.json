@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Jira Custom Filters Panel",
+  "version": "1.1.0",
+  "description": "Shows Jira board custom filters as a row of toggle buttons instead of a dropdown.",
+  "permissions": ["storage"],
+  "action": {
+    "default_title": "Jira Custom Filters",
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*.atlassian.net/*"],
+      "js": ["settings.js", "content.js", "toolbar.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    }
+  ]
+}

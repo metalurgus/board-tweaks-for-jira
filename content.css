@@ -1,0 +1,277 @@
+/* The original "Custom filters" button stays in the DOM (the chips drive it)
+   but is visually removed from the toolbar. */
+.jcf-hidden-trigger {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  clip-path: inset(50%) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Keep the dropdown invisible while a chip is driving it. */
+html.jcf-busy [data-testid$="--container"]:has([role="menu"][aria-label="Custom filters menu"]),
+html.jcf-busy [role="menu"][aria-label="Custom filters menu"] {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.jcf-bar {
+  display: flex;
+  flex: 0 1 auto;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.jcf-bar[hidden] {
+  display: none;
+}
+
+/* Single-row mode: take the remaining toolbar width and scroll sideways
+   instead of wrapping. flex-basis 0 keeps Jira's wrapping toolbar from
+   pushing the row onto a line of its own. The vertical padding/margin pair
+   leaves room for focus outlines, which overflow would otherwise clip. */
+.jcf-bar.jcf-single-row {
+  flex: 1 1 0;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin: -4px 0;
+  padding: 4px 0;
+  scrollbar-width: none;
+}
+
+/* Jira's filter area sizes itself to its full content (flex-basis auto), so
+   in its wrapping toolbar row the ••• / icon group drops to a second line
+   once the chips get long. Starting it from zero width makes it fill only
+   the space that is left, and the chip row scrolls instead. */
+.jcf-fill-toolbar {
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+}
+
+.jcf-bar.jcf-single-row::-webkit-scrollbar {
+  display: none;
+}
+
+.jcf-bar.jcf-single-row > * {
+  flex: none;
+}
+
+.jcf-bar.jcf-fade-left {
+  mask-image: linear-gradient(to right, transparent, #000 32px);
+}
+
+.jcf-bar.jcf-fade-right {
+  mask-image: linear-gradient(to left, transparent, #000 32px);
+}
+
+.jcf-bar.jcf-fade-left.jcf-fade-right {
+  mask-image: linear-gradient(to right, transparent, #000 32px, #000 calc(100% - 32px), transparent);
+}
+
+/* --jcf-font-size is set on .jcf-bar from the popup setting. Height and padding
+   follow it: 14px text gives Jira's 32px buttons. */
+.jcf-chip {
+  height: calc(var(--jcf-font-size, 14px) * 2 + 4px);
+  padding: 0 calc(var(--jcf-font-size, 14px) * 0.7);
+  border: 1px solid var(--ds-border, #091e4224);
+  border-radius: 4px;
+  background: var(--ds-background-neutral-subtle, transparent);
+  color: var(--ds-text-subtle, #44546f);
+  font: inherit;
+  font-size: var(--jcf-font-size, 14px);
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.jcf-chip:hover {
+  background: var(--ds-background-neutral-subtle-hovered, #091e420f);
+}
+
+.jcf-chip[aria-pressed="true"] {
+  border-color: transparent;
+  background: var(--ds-background-selected-bold, #0c66e4);
+  color: var(--ds-text-inverse, #ffffff);
+}
+
+.jcf-chip[aria-pressed="true"]:hover {
+  background: var(--ds-background-selected-bold-hovered, #0055cc);
+}
+
+/* Loading (content.js): placeholders before the first read of a board's
+   filters, and dimmed cached chips while their on/off state is unconfirmed. */
+.jcf-skeleton {
+  flex: none;
+  height: calc(var(--jcf-font-size, 14px) * 2 + 4px);
+  border-radius: 4px;
+  background: var(--ds-skeleton, #091e420f);
+  animation: jcf-pulse 0.9s ease-in-out infinite alternate;
+}
+
+@keyframes jcf-pulse {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.45;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jcf-skeleton {
+    animation: none;
+  }
+}
+
+.jcf-bar.jcf-unconfirmed .jcf-chip {
+  opacity: 0.55;
+}
+
+.jcf-chip.jcf-pending {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+/* Toolbar icons tucked into the ••• menu (toolbar.js): kept in the DOM,
+   invisibly stacked behind the ••• button so their popups anchor there. */
+.jcf-tuck-group {
+  position: relative !important;
+}
+
+.jcf-tucked {
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Compact search (toolbar.js): while "Search board" is empty and unfocused,
+   shrink it and its width-holding wrappers to a 32px icon. The input stays
+   in the layout (so the field keeps Jira's height) but is invisible and fills
+   the box; the icon floats centred on top and lets clicks through, so one
+   click focuses the input, which expands the field again via :focus-within. */
+html.jcf-compact-search .jcf-search-field:not(:focus-within):has(input:placeholder-shown) {
+  position: relative !important;
+  flex: none !important;
+  width: 32px !important;
+  min-width: 32px !important;
+  cursor: pointer;
+}
+
+html.jcf-compact-search .jcf-search-field:not(:focus-within):has(input:placeholder-shown) > input {
+  flex: 1 1 auto !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  /* Horizontal only: Jira's vertical padding is what makes the input (and
+     so the field) its full height. */
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  opacity: 0 !important;
+  cursor: pointer !important;
+}
+
+html.jcf-compact-search .jcf-search-field:not(:focus-within):has(input:placeholder-shown) > :not(input) {
+  position: absolute !important;
+  inset: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  pointer-events: none !important;
+}
+
+html.jcf-compact-search .jcf-search-slot:not(:focus-within):has(input:placeholder-shown) {
+  flex: none !important;
+  width: auto !important;
+  min-width: 0 !important;
+}
+
+.jcf-menu-section {
+  border-bottom: 1px solid var(--ds-border, #091e4224);
+  margin-bottom: 4px;
+  padding-bottom: 4px;
+}
+
+/* Our items make the menu wider, and Jira's items centre their content once
+   there's spare room; keep everything left-aligned. */
+.jcf-more-menu [role="menuitem"] {
+  justify-content: flex-start !important;
+  text-align: start !important;
+}
+
+.jcf-more-menu [role="menuitem"] > span {
+  justify-content: flex-start !important;
+}
+
+.jcf-more-menu [role="menuitem"] > span > div {
+  align-items: flex-start !important;
+}
+
+/* Matches Jira's own menu items (32px rows, 4px 12px padding, 14/20 text). */
+.jcf-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 32px;
+  padding: 4px 12px;
+  border: none;
+  background: transparent;
+  color: var(--ds-text, #292a2e);
+  font: inherit;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: start;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.jcf-menu-item:hover {
+  background: var(--ds-background-neutral-subtle-hovered, #0515240f);
+}
+
+.jcf-menu-item:active {
+  background: var(--ds-background-neutral-subtle-pressed, #0b120e24);
+}
+
+.jcf-menu-item:disabled {
+  color: var(--ds-text-disabled, #080f214a);
+  cursor: not-allowed;
+}
+
+.jcf-menu-item:focus-visible {
+  outline: 2px solid var(--ds-border-focused, #388bff);
+  outline-offset: -2px;
+}
+
+.jcf-menu-icon {
+  display: inline-flex;
+  flex: none;
+  width: 16px;
+  height: 16px;
+  color: var(--ds-icon, #505258);
+}
+
+.jcf-menu-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.jcf-sep {
+  width: 1px;
+  height: calc(var(--jcf-font-size, 14px) * 1.4);
+  margin: 0 4px;
+  background: var(--ds-border, #091e4224);
+}
+
+.jcf-chip:focus-visible {
+  outline: 2px solid var(--ds-border-focused, #388bff);
+  outline-offset: 2px;
+}
