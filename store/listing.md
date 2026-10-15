@@ -58,6 +58,7 @@ Not affiliated with or endorsed by Atlassian. Jira is a trademark of Atlassian.
 - Store icon: `icons/icon128.png`
 - Screenshots (1280×800): `store/screenshot-1.png`, `store/screenshot-2.png`
 - Small promo tile (440×280): `store/promo-small-440x280.png`
+- Marquee promo tile (1400×560, optional): `store/marquee-1400x560.png`
 
 **Additional fields:**
 - Homepage URL: https://github.com/metalurgus/board-tweaks-for-jira
