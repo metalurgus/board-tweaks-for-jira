@@ -1,11 +1,11 @@
 {
   "manifest_version": 3,
-  "name": "Jira Custom Filters Panel",
-  "version": "1.1.0",
-  "description": "Shows Jira board custom filters as a row of toggle buttons instead of a dropdown.",
+  "name": "Jira UI Tweaks",
+  "version": "1.2.0",
+  "description": "Tweaks Jira Cloud's board UI: custom filters as toggle buttons, plus a more compact toolbar and search.",
   "permissions": ["storage"],
   "action": {
-    "default_title": "Jira Custom Filters",
+    "default_title": "Jira UI Tweaks",
     "default_popup": "popup.html"
   },
   "content_scripts": [
