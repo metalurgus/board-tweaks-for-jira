@@ -18,6 +18,6 @@ browsers if you're signed in to Chrome.
 other than the Jira site you're on, and it has no analytics or tracking.
 
 **Contact.** Questions about this policy:
-[open an issue](https://github.com/metalurgus/jira-ui-tweaks/issues).
+[open an issue](https://github.com/metalurgus/board-tweaks-for-jira/issues).
 
 *Last updated: October 15, 2026.*

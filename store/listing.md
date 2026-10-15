@@ -45,7 +45,7 @@ REQUIREMENTS
 Jira Cloud (*.atlassian.net). Quick filters are set up per board in Board settings → Custom filters on company-managed boards; team-managed boards don't have them, so there only the toolbar and search tweaks apply.
 
 PRIVACY
-The extension runs only on Jira Cloud pages, collects no data and sends nothing anywhere. It's open source: https://github.com/metalurgus/jira-ui-tweaks
+The extension runs only on Jira Cloud pages, collects no data and sends nothing anywhere. It's open source: https://github.com/metalurgus/board-tweaks-for-jira
 
 Not affiliated with or endorsed by Atlassian. Jira is a trademark of Atlassian.
 ```
@@ -60,8 +60,8 @@ Not affiliated with or endorsed by Atlassian. Jira is a trademark of Atlassian.
 - Small promo tile (440×280): `store/promo-small-440x280.png`
 
 **Additional fields:**
-- Homepage URL: https://github.com/metalurgus/jira-ui-tweaks
-- Support URL: https://github.com/metalurgus/jira-ui-tweaks/issues
+- Homepage URL: https://github.com/metalurgus/board-tweaks-for-jira
+- Support URL: https://github.com/metalurgus/board-tweaks-for-jira/issues
 
 ## Privacy practices tab
 
@@ -78,4 +78,4 @@ The extension modifies Jira Cloud board pages, which are served from *.atlassian
 
 **Data usage:** tick none of the data types (the extension collects no user data), then certify the three statements (no selling, no unrelated use, no creditworthiness use).
 
-**Privacy policy URL:** https://github.com/metalurgus/jira-ui-tweaks/blob/main/PRIVACY.md
+**Privacy policy URL:** https://github.com/metalurgus/board-tweaks-for-jira/blob/main/PRIVACY.md

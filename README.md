@@ -49,7 +49,7 @@ any data. See [PRIVACY.md](PRIVACY.md).
 
 ## Bugs and feature requests
 
-Please [open an issue](https://github.com/metalurgus/jira-ui-tweaks/issues/new/choose).
+Please [open an issue](https://github.com/metalurgus/board-tweaks-for-jira/issues/new/choose).
 Jira changes its interface often, so if something stops working, a report with
 a screenshot of your board's toolbar helps a lot.
 
