@@ -10,8 +10,10 @@
 (() => {
   'use strict';
 
-  const MORE_LABEL = 'More board view actions';
-  const MORE_MENU_SELECTOR = '[role="menu"][aria-label="More actions on board view"]';
+  // Popups Jira renders inside the toolbar: the ••• menu and the icons' dialogs.
+  const POPUP_SELECTOR = '[data-testid$="--container"], [role="dialog"], [role="menu"]';
+  // At most this many levels from the search field up to the toolbar row.
+  const MAX_TOOLBAR_DEPTH = 10;
   const GROUP_CLASS = 'jcf-tuck-group';
   const TUCKED_CLASS = 'jcf-tucked';
   const MENU_CLASS = 'jcf-more-menu';
@@ -29,28 +31,42 @@
 
   const label = (button) => button.textContent.trim();
 
-  const findMoreButton = () =>
-    [...document.querySelectorAll('button[aria-haspopup]')].find((b) => label(b) === MORE_LABEL);
-
-  // The ••• button's wrapper is the child of the icon group that holds only it;
-  // its siblings are the icons we tuck away.
+  // The toolbar row starts with the filter controls (search field first) and
+  // ends with the group of icons, whose last button is •••. Found by structure
+  // rather than by label, since Jira translates those. The ••• button's
+  // wrapper is its ancestor in the group; its siblings are the icons we tuck away.
   function findToolbar() {
-    const more = findMoreButton();
-    if (!more) return null;
-    let wrapper = more;
-    while (wrapper.parentElement && wrapper.parentElement.querySelectorAll('button').length === 1) {
-      wrapper = wrapper.parentElement;
+    const search = document.querySelector(SEARCH_FIELD_SELECTOR);
+    let row = search?.parentElement;
+    for (let depth = 0; row && depth < MAX_TOOLBAR_DEPTH; depth++, row = row.parentElement) {
+      const group = row.lastElementChild;
+      if (group.contains(search)) continue;
+      const buttons = [...group.querySelectorAll('button')].filter((b) => {
+        const popup = b.closest(POPUP_SELECTOR);
+        return !popup || !group.contains(popup);
+      });
+      const more = buttons.at(-1);
+      if (buttons.length < 2 || more.getAttribute('aria-haspopup') !== 'true') continue;
+      let wrapper = more;
+      while (wrapper.parentElement !== group) wrapper = wrapper.parentElement;
+      return { more, wrapper, group };
     }
-    const group = wrapper.parentElement;
-    if (!group) return null;
-    return { more, wrapper, group };
+    return null;
+  }
+
+  const findMoreButton = () => findToolbar()?.more;
+
+  // The ••• button points at its open menu's container.
+  function findMoreMenu(more) {
+    const id = more.getAttribute('aria-controls');
+    const container = id && document.getElementById(id);
+    if (!container) return null;
+    return container.matches('[role="menu"]') ? container : container.querySelector('[role="menu"]');
   }
 
   // Jira renders the icons' popups (and the ••• menu itself) inside the same
   // group, so those must stay visible.
-  const isPopup = (el) =>
-    el.matches('[data-testid$="--container"], [role="dialog"], [role="menu"]') ||
-    !!el.querySelector('[role="dialog"], [role="menu"]');
+  const isPopup = (el) => el.matches(POPUP_SELECTOR) || !!el.querySelector('[role="dialog"], [role="menu"]');
 
   const iconSlots = (toolbar) =>
     [...toolbar.group.children].filter((child) => child !== toolbar.wrapper && !isPopup(child));
@@ -151,10 +167,9 @@
 
   function injectMenuItems() {
     if (!enabled) return;
-    const menu = document.querySelector(MORE_MENU_SELECTOR);
-    if (!menu || menu.querySelector(`.${MENU_SECTION_CLASS}`)) return;
     const toolbar = findToolbar();
-    if (!toolbar) return;
+    const menu = toolbar && findMoreMenu(toolbar.more);
+    if (!menu || menu.querySelector(`.${MENU_SECTION_CLASS}`)) return;
     const sources = tuckedButtons(toolbar);
     if (!sources.length) return;
 

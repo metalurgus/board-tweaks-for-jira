@@ -10,9 +10,10 @@
   pointer-events: none !important;
 }
 
-/* Keep the dropdown invisible while a chip is driving it. */
-html.jcf-busy [data-testid$="--container"]:has([role="menu"][aria-label="Custom filters menu"]),
-html.jcf-busy [role="menu"][aria-label="Custom filters menu"] {
+/* Keep the dropdown (a menu with a multi-select list) invisible while a chip
+   is driving it. */
+html.jcf-busy [data-testid$="--container"]:has([role="menu"] [role="listbox"][aria-multiselectable="true"]),
+html.jcf-busy [role="menu"]:has([role="listbox"][aria-multiselectable="true"]) {
   opacity: 0 !important;
   pointer-events: none !important;
 }
@@ -101,35 +102,6 @@ html.jcf-busy [role="menu"][aria-label="Custom filters menu"] {
 
 .jcf-chip[aria-pressed="true"]:hover {
   background: var(--ds-background-selected-bold-hovered, #0055cc);
-}
-
-/* Loading (content.js): placeholders before the first read of a board's
-   filters, and dimmed cached chips while their on/off state is unconfirmed. */
-.jcf-skeleton {
-  flex: none;
-  height: calc(var(--jcf-font-size, 14px) * 2 + 4px);
-  border-radius: 4px;
-  background: var(--ds-skeleton, #091e420f);
-  animation: jcf-pulse 0.9s ease-in-out infinite alternate;
-}
-
-@keyframes jcf-pulse {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0.45;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .jcf-skeleton {
-    animation: none;
-  }
-}
-
-.jcf-bar.jcf-unconfirmed .jcf-chip {
-  opacity: 0.55;
 }
 
 .jcf-chip.jcf-pending {
