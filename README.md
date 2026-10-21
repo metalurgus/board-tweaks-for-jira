@@ -6,6 +6,9 @@ A Chrome extension that makes Jira Cloud boards quicker to filter: your board's
 quick filters become one-click toggle buttons instead of a dropdown, and the
 board toolbar and search get out of the way.
 
+[![Chrome Web Store version](https://img.shields.io/chrome-web-store/v/lclpdkflnpanakdcopkkafkdlklegaoh)](https://chromewebstore.google.com/detail/board-tweaks-for-jira/lclpdkflnpanakdcopkkafkdlklegaoh)
+[![Chrome Web Store users](https://img.shields.io/chrome-web-store/users/lclpdkflnpanakdcopkkafkdlklegaoh)](https://chromewebstore.google.com/detail/board-tweaks-for-jira/lclpdkflnpanakdcopkkafkdlklegaoh)
+
 <br clear="left">
 
 ![A Jira board with its quick filters shown as toggle buttons in the toolbar](store/screenshot-1.png)
@@ -37,7 +40,8 @@ any Jira language.
 
 ## Install
 
-- **Chrome Web Store:** *coming soon*.
+- **Chrome Web Store:** [Board Tweaks for Jira](https://chromewebstore.google.com/detail/board-tweaks-for-jira/lclpdkflnpanakdcopkkafkdlklegaoh)
+  (recommended; updates install automatically).
 - **From source:** download or clone this repository, open
   `chrome://extensions`, turn on *Developer mode*, click *Load unpacked* and
   choose the repository folder.
