@@ -38,6 +38,7 @@ FEATURES
 • Compact search – "Search board" shrinks to an icon until you click it.
 • Compact toolbar – the board's icon buttons (Sprint details, View settings, …) move into the ••• menu.
 • Compact cards – less padding, titles up to two lines and smaller avatars, so about a third more cards fit on screen.
+• Column width – set an exact column width: narrower so more fit without scrolling sideways, or wider for long titles. "Auto" keeps Jira's own sizing.
 • Adjustable button text size.
 
 Everything can be switched on and off from the extension's popup, and it works with any Jira language.

@@ -158,6 +158,25 @@ input[role="switch"]:disabled {
   appearance: textfield;
 }
 
+.stepper input.wide {
+  width: 4ch;
+}
+
+.label .link {
+  align-self: flex-start;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--accent);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.label .link:hover {
+  text-decoration: underline;
+}
+
 .stepper input::-webkit-outer-spin-button,
 .stepper input::-webkit-inner-spin-button {
   margin: 0;

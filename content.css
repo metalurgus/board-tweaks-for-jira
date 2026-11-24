@@ -340,7 +340,18 @@ html.jcf-compact-search .jcf-search-slot:not(:focus-within):has(input:placeholde
   flex: none !important;
 }
 
-/* Compact cards (cards.js). Jira's card: content grid > [summary row,
+/* Exact column width (board.js). Jira sizes columns from --column-min-width
+   (200px) but also gives each a fixed 200px flex-basis and lets it grow, so
+   all three are set. Works the same in swimlanes. */
+html.jcf-column-width [data-testid="board.content.board-wrapper"] {
+  --column-min-width: var(--jcf-column-width) !important;
+}
+
+html.jcf-column-width [data-testid="board.content.board-wrapper"] :has(> [data-testid="board.content.cell"]) {
+  flex: 0 0 var(--column-min-width) !important;
+}
+
+/* Compact cards (board.js). Jira's card: content grid > [summary row,
    (field rows...), key row]. Matched by structure: the class names are
    hashed and change with every Jira release. Cards get 25-30% shorter. */
 html.jcf-compact-cards [data-testid="board.content.cell.card"] > div > div:last-child {

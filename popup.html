@@ -49,6 +49,20 @@
   </label>
 
   <div class="row">
+    <span class="label" id="column-label">
+      Column width
+      <span class="hint" id="column-hint">Auto: Jira fits them to the screen</span>
+      <button id="column-reset" class="link" type="button" hidden>Back to auto</button>
+    </span>
+    <div class="stepper" role="group" aria-labelledby="column-label">
+      <button id="column-down" type="button" aria-label="Narrower columns">&minus;</button>
+      <input id="column" class="wide" type="text" inputmode="numeric" aria-labelledby="column-label">
+      <span class="unit" id="column-unit">px</span>
+      <button id="column-up" type="button" aria-label="Wider columns">+</button>
+    </div>
+  </div>
+
+  <div class="row">
     <span class="label" id="size-label">Text size</span>
     <div class="stepper" role="group" aria-labelledby="size-label">
       <button id="size-down" type="button" aria-label="Decrease text size">&minus;</button>

@@ -31,6 +31,9 @@ board toolbar and search get out of the way.
   settings, …) move into the ••• menu.
 - **Compact cards.** Less padding, titles up to two lines and smaller avatars,
   so about a third more cards fit on screen.
+- **Column width.** Set an exact width for the columns: narrower so more fit
+  without scrolling sideways (Jira never goes below 200px), or wider for long
+  titles. *Auto* keeps Jira's own sizing.
 - **Adjustable text size** for the buttons.
 
 Everything can be switched on and off from the extension's popup. It works with

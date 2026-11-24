@@ -10,14 +10,24 @@
     singleRow: true,
     compactSearch: true,
     compactCards: false,
+    columnWidth: 0, // 0: Jira's own sizing (columns stretch to fill the board)
   };
   const MIN_FONT_SIZE = 9;
   const MAX_FONT_SIZE = 20;
+  const MIN_COLUMN_WIDTH = 120;
+  const MAX_COLUMN_WIDTH = 480;
+  const COLUMN_WIDTH_STEP = 10;
 
   const clampFontSize = (size) =>
     Number.isFinite(size)
       ? Math.min(MAX_FONT_SIZE, Math.max(MIN_FONT_SIZE, Math.round(size)))
       : DEFAULTS.fontSize;
+
+  // An exact width in px, or 0 for Jira's own sizing.
+  const clampColumnWidth = (width) =>
+    Number.isFinite(width) && width > 0
+      ? Math.min(MAX_COLUMN_WIDTH, Math.max(MIN_COLUMN_WIDTH, Math.round(width)))
+      : 0;
 
   const normalize = (raw) => ({
     expanded: raw.expanded !== false,
@@ -26,12 +36,17 @@
     singleRow: raw.singleRow !== false,
     compactSearch: raw.compactSearch !== false,
     compactCards: raw.compactCards === true,
+    columnWidth: clampColumnWidth(Number(raw.columnWidth)),
   });
 
   globalThis.jcfSettings = {
     MIN_FONT_SIZE,
     MAX_FONT_SIZE,
     clampFontSize,
+    MIN_COLUMN_WIDTH,
+    MAX_COLUMN_WIDTH,
+    COLUMN_WIDTH_STEP,
+    clampColumnWidth,
 
     async load() {
       return normalize(await chrome.storage.sync.get(DEFAULTS));
