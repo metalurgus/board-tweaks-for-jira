@@ -1,6 +1,5 @@
 // A small menu that opens under one of our toolbar buttons, styled after
-// Jira's own (content.css, .jcf-popover). Used for the filter dropdown and
-// the saved filter sets.
+// Jira's own (content.css, .jcf-popover). Used for the saved filter sets.
 //
 // It lives in <body> with fixed positioning, so the toolbar's overflow
 // (sideways scrolling in single-row mode) can't clip it.

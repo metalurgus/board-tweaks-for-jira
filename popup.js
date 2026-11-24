@@ -136,11 +136,11 @@
   render();
   showBoardUi();
 
-  // Jira is bringing back its own line of filter buttons, board by board.
-  // Where the open board already has it, "Show filters as buttons" works the
-  // other way round: off folds Jira's buttons into a dropdown. Any other page
-  // (or no answer, e.g. a tab opened before the extension was loaded) keeps
-  // the dropdown UI's wording.
+  // Jira can show the filters as its own line of buttons instead of the
+  // dropdown (its View settings: "Show custom filters individually"). On a
+  // board showing the line there's no dropdown to turn into buttons, so that
+  // switch is greyed out. Any other page (or no answer, e.g. a tab opened
+  // before the extension was loaded) leaves it as is.
   async function showBoardUi() {
     let ui = null;
     try {
@@ -150,6 +150,9 @@
       return; // no content script in this tab
     }
     if (ui !== 'line') return;
-    document.getElementById('expanded-hint').textContent = "Off folds Jira's filter buttons into a dropdown";
+    expandedInput.disabled = true;
+    expandedInput.closest('.row').classList.add('unavailable');
+    document.getElementById('expanded-hint').textContent =
+      "Jira shows its own buttons here (set in Jira's View settings)";
   }
 })();

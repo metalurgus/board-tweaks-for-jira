@@ -34,8 +34,7 @@ Jira's board filters either hide in a "Custom filters" dropdown or, on boards wi
 
 FEATURES
 • One line of filters – the board's filters sit in the toolbar on a single line and scroll sideways (the mouse wheel works), instead of wrapping over several rows. Or let them wrap, if you prefer.
-• Quick filters as buttons – on boards where Jira still hides them in the Custom filters dropdown, every filter becomes a button you can toggle with one click. Selected filters are highlighted and stay in sync with Jira, whichever way you change them.
-• Or a dropdown – on boards where Jira shows its own filter buttons, fold them into one dropdown instead.
+• Quick filters as buttons – when Jira shows them in its Custom filters dropdown, every filter becomes a button you can toggle with one click. Selected filters are highlighted and stay in sync with Jira, whichever way you change them. When Jira shows its own line of filter buttons ("Show custom filters individually" in View settings), the extension works with those instead.
 • Saved filter sets – save a combination of filters ("Android + QA") and apply it in one click, per board.
 • Number keys – optionally, 1–9 toggle the first nine filters and 0 clears them all.
 • Separators – name a quick filter "|" or "—" and it's drawn as a divider, so you can group related filters.

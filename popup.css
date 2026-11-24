@@ -100,6 +100,20 @@ input[role="switch"]:checked::after {
 }
 
 
+/* A setting that doesn't apply to the open board (see popup.js). */
+.row.unavailable {
+  cursor: default;
+}
+
+.row.unavailable > .label {
+  color: var(--text-subtle);
+}
+
+input[role="switch"]:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
 /* Text size stepper */
 .stepper {
   display: inline-flex;

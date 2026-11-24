@@ -19,14 +19,14 @@ cards get out of the way.
 - **One line of filters.** The board's filters sit in the toolbar on a single
   line and scroll sideways (mouse wheel works), instead of wrapping over
   several rows above the board. Or let them wrap.
-- **Quick filters as buttons.** Where Jira still hides them in the *Custom
-  filters* dropdown, every filter shows up as a button you can toggle with one
-  click. Selected ones are highlighted, and they stay in sync with Jira when
-  you change filters another way (the dropdown, *Clear filters*, the back
-  button, a shared link).
-- **Or a dropdown.** Jira is bringing its own line of filter buttons back,
-  site by site. Where a board has it, the extension applies its tweaks to
-  Jira's buttons, or folds them into one dropdown if you prefer.
+- **Quick filters as buttons.** Jira shows a board's filters either in a
+  *Custom filters* dropdown or as a line of its own buttons, depending on
+  *Show custom filters individually* in the board's *View settings*. With the
+  dropdown, every filter shows up as a button you can toggle with one click.
+  Selected ones are highlighted, and they stay in sync with Jira when you
+  change filters another way (the dropdown, *Clear filters*, the back button,
+  a shared link). With Jira's own line, the extension keeps Jira's buttons and
+  applies the one-line, separator and text-size tweaks to them.
 - **Saved filter sets.** Save a combination of filters and apply it in one
   click, from the bookmark button next to the filters. Kept per board.
 - **Number keys.** Optionally, <kbd>1</kbd>–<kbd>9</kbd> toggle the first nine

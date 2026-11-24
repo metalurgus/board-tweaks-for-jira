@@ -322,18 +322,14 @@ html.jcf-compact-search .jcf-search-slot:not(:focus-within):has(input:placeholde
   order: 1 !important;
 }
 
-/* margin-left: auto keeps the icons at the right edge when nothing fills
-   the space before them (the line folded into our dropdown). */
+/* margin-left: auto keeps the icons at the right edge even when the line
+   doesn't fill the space before them. */
 [data-jcf-row][data-jcf-single] > [data-jcf-tail] {
   flex: none !important;
   order: 2 !important;
   margin-left: auto !important;
 }
 
-/* "Show filters as buttons" off: the line folds into our dropdown. */
-[data-jcf-line][data-jcf-collapsed] {
-  display: none !important;
-}
 
 [data-jcf-line][data-jcf-single] {
   order: 1 !important;
@@ -403,8 +399,8 @@ html.jcf-compact-cards [data-testid="board.content.cell.card"] > div > div:last-
   zoom: 0.75;
 }
 
-/* Our own toolbar buttons (content.js .jcf-controls): the filter dropdown on
-   Jira's line, and the saved filter sets (presets.js). Sized like Jira's. */
+/* Our own toolbar buttons (content.js .jcf-controls): the saved filter sets
+   (presets.js). Sized like Jira's. */
 /* position: relative lifts it above the toolbar row's full-size ::before
    layer, which would otherwise take its clicks (Jira's own items do the same). */
 .jcf-controls {
@@ -464,17 +460,7 @@ html.jcf-compact-cards [data-testid="board.content.cell.card"] > div > div:last-
   fill: currentColor;
 }
 
-.jcf-filters-button::after {
-  content: "";
-  width: 6px;
-  height: 6px;
-  margin: -3px 2px 0 4px;
-  border: solid currentColor;
-  border-width: 0 1.5px 1.5px 0;
-  transform: rotate(45deg);
-}
-
-/* The menus themselves (popover.js), after Jira's dropdown menus. */
+/* The menu itself (popover.js), after Jira's dropdown menus. */
 .jcf-popover {
   position: fixed;
   z-index: 2147483000;

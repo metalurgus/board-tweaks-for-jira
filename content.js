@@ -1,15 +1,14 @@
 // Renders a board's quick filters (Jira's "Custom filters" dropdown) as a row
 // of toggle chips.
 //
-// Jira is rolling back to a line of its own filter buttons, and not everyone
-// has it yet, so each page is checked for which one it shows. On the line we
-// don't add chips: we restyle Jira's buttons (text size, "|" separators) and,
-// in single-row mode, fit the line into the toolbar row with sideways
-// scrolling. With "Show filters as buttons" off, the line folds into a
-// dropdown of our own instead.
+// Jira can instead show the filters as a line of its own buttons: a per-view
+// setting in the board's View settings ("Show custom filters individually").
+// Each page is checked for which one it shows. On the line we don't add
+// chips: we restyle Jira's buttons (text size, "|" separators) and, in
+// single-row mode, fit the line into the toolbar row with sideways scrolling.
 //
 // Both UIs are driven through jcfFilters (bottom of this file), which the
-// saved filter sets and keyboard shortcuts use; their buttons go in a
+// saved filter sets and keyboard shortcuts use; their button goes in a
 // .jcf-controls slot this file places in the toolbar.
 //
 // The filters come from Jira's REST API and their on/off state from the URL,
@@ -38,7 +37,6 @@
   const TAIL_ATTR = 'data-jcf-tail'; // toolbar items that go after the line
   const SEP_ATTR = 'data-jcf-sep'; // a "|" filter's item in the line
   const SINGLE_ATTR = 'data-jcf-single'; // on line and row in single-row mode
-  const COLLAPSED_ATTR = 'data-jcf-collapsed'; // on the line, folded into our dropdown
   const MAX_LINE_DEPTH = 3; // levels from a filter button up to the line
   // Jira lazy-loads the dropdown's code on first open, which can take a few
   // seconds while the rest of the board is still booting.
@@ -51,8 +49,7 @@
   let anchor = null; // Jira's wrapper around the "Custom filters" button
   let bar = null;
   let line = null; // Jira's own line of filter buttons, when the board has one
-  let controls = null; // our slot for toolbar buttons (dropdown, saved sets)
-  let lineDropdown = null; // { button, popover } folding Jira's line, see below
+  let controls = null; // our slot for toolbar buttons (saved filter sets)
   const changeListeners = new Set();
   const controlsListeners = new Set();
   let queue = Promise.resolve();
@@ -357,7 +354,6 @@
     const row = line.parentElement;
     const single = settings.singleRow;
     line.toggleAttribute(SINGLE_ATTR, single);
-    line.toggleAttribute(COLLAPSED_ATTR, !settings.expanded);
     line.style.setProperty('--jcf-font-size', `${settings.fontSize}px`);
     if (row) {
       row.setAttribute(ROW_ATTR, '');
@@ -395,7 +391,7 @@
     const row = line.parentElement;
     for (const el of [line, row, ...(row?.children ?? []), ...line.children]) {
       if (!el) continue;
-      for (const attr of [LINE_ATTR, ROW_ATTR, HEAD_ATTR, TAIL_ATTR, SINGLE_ATTR, COLLAPSED_ATTR, 'data-jcf-fade']) {
+      for (const attr of [LINE_ATTR, ROW_ATTR, HEAD_ATTR, TAIL_ATTR, SINGLE_ATTR, 'data-jcf-fade']) {
         el.removeAttribute(attr);
       }
       if (el.hasAttribute(SEP_ATTR)) {
@@ -429,51 +425,7 @@
     }
     if (controls.previousElementSibling !== after) after.after(controls);
     controls.style.setProperty('--jcf-font-size', `${settings.fontSize}px`);
-    updateLineDropdown();
     for (const fn of controlsListeners) fn();
-  }
-
-  // --- Jira's line folded into a dropdown ---------------------------------------
-
-  // With "Show filters as buttons" off on Jira's line, the line is hidden
-  // (content.css) and this button lists the filters as a menu of checkboxes,
-  // each clicking Jira's own button.
-  function updateLineDropdown() {
-    const wanted = !!line?.isConnected && !settings.expanded;
-    if (!wanted) {
-      lineDropdown?.popover.close();
-      lineDropdown?.button.remove();
-      return;
-    }
-    if (!lineDropdown) {
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'jcf-tool-button jcf-filters-button';
-      const popover = jcfPopover.create({ button, label: 'Custom filters', render: renderLineMenu });
-      lineDropdown = { button, popover };
-    }
-    if (!lineDropdown.button.isConnected) controls.prepend(lineDropdown.button);
-    // Only touch the DOM when the label changes: this runs on every page change.
-    const count = filterStates().filter((f) => f.selected).length;
-    const text = count ? `Custom filters · ${count}` : 'Custom filters';
-    if (lineDropdown.button.textContent !== text) lineDropdown.button.textContent = text;
-    if (lineDropdown.button.getAttribute('aria-pressed') !== String(count > 0)) {
-      lineDropdown.button.setAttribute('aria-pressed', String(count > 0));
-    }
-  }
-
-  function renderLineMenu(menu) {
-    menu.replaceChildren(
-      ...filterStates().map((filter, index) =>
-        filter.separator
-          ? jcfPopover.separator()
-          : jcfPopover.item({
-              text: filter.name,
-              checked: filter.selected,
-              onClick: () => toggleFilter(index),
-            })
-      )
-    );
   }
 
   // --- settings from the popup ------------------------------------------------
@@ -612,7 +564,7 @@
     return toggle(index);
   }
 
-  // Tells listeners (open menus, saved sets) when the filters or their states
+  // Tells listeners (the saved sets) when the filters or their states
   // changed. Called on every page change, so it compares first: re-rendering
   // an open menu is itself a page change.
   let notifyScheduled = false;
@@ -625,10 +577,6 @@
       const states = JSON.stringify(filterStates());
       if (states === lastStates) return;
       lastStates = states;
-      if (lineDropdown) {
-        updateLineDropdown();
-        lineDropdown.popover.refresh();
-      }
       for (const fn of changeListeners) fn();
     });
   }
