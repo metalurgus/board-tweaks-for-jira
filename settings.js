@@ -10,6 +10,8 @@
     singleRow: true,
     compactSearch: true,
     compactCards: false,
+    filterShortcuts: false,
+    tintCards: false,
     columnWidth: 0, // 0: Jira's own sizing (columns stretch to fill the board)
   };
   const MIN_FONT_SIZE = 9;
@@ -36,6 +38,8 @@
     singleRow: raw.singleRow !== false,
     compactSearch: raw.compactSearch !== false,
     compactCards: raw.compactCards === true,
+    filterShortcuts: raw.filterShortcuts === true,
+    tintCards: raw.tintCards === true,
     columnWidth: clampColumnWidth(Number(raw.columnWidth)),
   });
 

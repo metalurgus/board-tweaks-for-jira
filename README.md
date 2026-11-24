@@ -2,9 +2,10 @@
 
 # Board Tweaks for Jira
 
-A Chrome extension that makes Jira Cloud boards quicker to filter: your board's
-quick filters become one-click toggle buttons instead of a dropdown, and the
-board toolbar and search get out of the way.
+A Chrome extension that makes Jira Cloud boards quicker to filter and fits more
+of the board on screen: your board's quick filters sit on one line in the
+toolbar, saved filter sets apply in one click, and the toolbar, search and
+cards get out of the way.
 
 [![Chrome Web Store version](https://img.shields.io/chrome-web-store/v/lclpdkflnpanakdcopkkafkdlklegaoh)](https://chromewebstore.google.com/detail/board-tweaks-for-jira/lclpdkflnpanakdcopkkafkdlklegaoh)
 [![Chrome Web Store users](https://img.shields.io/chrome-web-store/users/lclpdkflnpanakdcopkkafkdlklegaoh)](https://chromewebstore.google.com/detail/board-tweaks-for-jira/lclpdkflnpanakdcopkkafkdlklegaoh)
@@ -15,17 +16,23 @@ board toolbar and search get out of the way.
 
 ## Features
 
-- **Quick filters as buttons.** Every filter from the board's *Custom filters*
-  dropdown shows up as a button you can toggle with one click. Selected ones are
-  highlighted, and they stay in sync with Jira when you change filters another
-  way (the dropdown, *Clear filters*, the back button, a shared link).
-  Jira is bringing its own line of filter buttons back, site by site; where a
-  board already has it, the extension leaves those buttons in place and
-  applies the tweaks below to them instead.
+- **One line of filters.** The board's filters sit in the toolbar on a single
+  line and scroll sideways (mouse wheel works), instead of wrapping over
+  several rows above the board. Or let them wrap.
+- **Quick filters as buttons.** Where Jira still hides them in the *Custom
+  filters* dropdown, every filter shows up as a button you can toggle with one
+  click. Selected ones are highlighted, and they stay in sync with Jira when
+  you change filters another way (the dropdown, *Clear filters*, the back
+  button, a shared link).
+- **Or a dropdown.** Jira is bringing its own line of filter buttons back,
+  site by site. Where a board has it, the extension applies its tweaks to
+  Jira's buttons, or folds them into one dropdown if you prefer.
+- **Saved filter sets.** Save a combination of filters and apply it in one
+  click, from the bookmark button next to the filters. Kept per board.
+- **Number keys.** Optionally, <kbd>1</kbd>–<kbd>9</kbd> toggle the first nine
+  filters and <kbd>0</kbd> clears them all.
 - **Separators.** Name a quick filter `|` or `—` and it's drawn as a divider,
   so you can group related filters.
-- **One line or wrapped.** Keep the buttons on one line and scroll sideways
-  (mouse wheel works), or let them wrap.
 - **Compact search.** *Search board* shrinks to an icon until you click it.
 - **Compact toolbar.** The board's icon buttons (Sprint details, View
   settings, …) move into the ••• menu.
@@ -34,6 +41,8 @@ board toolbar and search get out of the way.
 - **Column width.** Set an exact width for the columns: narrower so more fit
   without scrolling sideways (Jira never goes below 200px), or wider for long
   titles. *Auto* keeps Jira's own sizing.
+- **Card colours.** Tint the whole card with its card colour, not just the
+  thin stripe.
 - **Adjustable text size** for the buttons.
 
 Everything can be switched on and off from the extension's popup. It works with

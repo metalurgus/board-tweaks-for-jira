@@ -31,6 +31,8 @@
   const singleRowInput = document.getElementById('single-row');
   const compactSearchInput = document.getElementById('compact-search');
   const compactCardsInput = document.getElementById('compact-cards');
+  const tintCardsInput = document.getElementById('tint-cards');
+  const filterShortcutsInput = document.getElementById('filter-shortcuts');
   const sizeInput = document.getElementById('size');
   const sizeDown = document.getElementById('size-down');
   const sizeUp = document.getElementById('size-up');
@@ -53,6 +55,8 @@
     singleRowInput.checked = settings.singleRow;
     compactSearchInput.checked = settings.compactSearch;
     compactCardsInput.checked = settings.compactCards;
+    tintCardsInput.checked = settings.tintCards;
+    filterShortcutsInput.checked = settings.filterShortcuts;
     sizeInput.value = String(settings.fontSize);
     sizeDown.disabled = settings.fontSize <= MIN_FONT_SIZE;
     sizeUp.disabled = settings.fontSize >= MAX_FONT_SIZE;
@@ -101,6 +105,10 @@
   compactSearchInput.addEventListener('change', () =>
     update({ compactSearch: compactSearchInput.checked })
   );
+  tintCardsInput.addEventListener('change', () => update({ tintCards: tintCardsInput.checked }));
+  filterShortcutsInput.addEventListener('change', () =>
+    update({ filterShortcuts: filterShortcutsInput.checked })
+  );
   compactCardsInput.addEventListener('change', () =>
     update({ compactCards: compactCardsInput.checked })
   );
@@ -129,9 +137,10 @@
   showBoardUi();
 
   // Jira is bringing back its own line of filter buttons, board by board.
-  // Where the open board already has it, there is no dropdown to turn into
-  // buttons, so that switch is greyed out. Any other page (or no answer,
-  // e.g. a tab opened before the extension was loaded) leaves it as is.
+  // Where the open board already has it, "Show filters as buttons" works the
+  // other way round: off folds Jira's buttons into a dropdown. Any other page
+  // (or no answer, e.g. a tab opened before the extension was loaded) keeps
+  // the dropdown UI's wording.
   async function showBoardUi() {
     let ui = null;
     try {
@@ -141,9 +150,6 @@
       return; // no content script in this tab
     }
     if (ui !== 'line') return;
-    expandedInput.disabled = true;
-    expandedInput.closest('.row').classList.add('unavailable');
-    document.getElementById('expanded-hint').textContent =
-      'Jira shows its own filter buttons on this board';
+    document.getElementById('expanded-hint').textContent = "Off folds Jira's filter buttons into a dropdown";
   }
 })();

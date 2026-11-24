@@ -1,5 +1,6 @@
 // Board layout tweaks (CSS in content.css, keyed off <html>):
 // - compactCards: tighter cards so more fit on screen.
+// - tintCards: tints each card with its card colour, not just the stripe.
 // - columnWidth: an exact column width. Jira's own sizing (the default) gives
 //   columns at least 200px and stretches them to fill the board, so below
 //   that point a smaller minimum would change nothing; an exact width always
@@ -9,11 +10,13 @@
 
   const COMPACT_CARDS_CLASS = 'jcf-compact-cards';
   const COLUMN_WIDTH_CLASS = 'jcf-column-width';
+  const TINT_CARDS_CLASS = 'jcf-tint-cards';
   const CELL_SELECTOR = '[data-testid="board.content.cell"]';
 
-  function apply({ compactCards, columnWidth }) {
+  function apply({ compactCards, tintCards, columnWidth }) {
     const root = document.documentElement;
     root.classList.toggle(COMPACT_CARDS_CLASS, compactCards);
+    root.classList.toggle(TINT_CARDS_CLASS, tintCards);
     root.classList.toggle(COLUMN_WIDTH_CLASS, columnWidth > 0);
     if (columnWidth > 0) root.style.setProperty('--jcf-column-width', `${columnWidth}px`);
     else root.style.removeProperty('--jcf-column-width');

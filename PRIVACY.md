@@ -10,7 +10,8 @@ existing Jira session. That information is used in the page and is not stored
 or sent anywhere else.
 
 **What it stores.** Only your settings from the extension's popup (which
-tweaks are on, and the button text size). They're kept in Chrome's extension
+tweaks are on, sizes) and the filter sets you save (a name you choose and the
+names of the filters in it, per board). They're kept in Chrome's extension
 storage (`chrome.storage.sync`), which Chrome may sync between your own
 browsers if you're signed in to Chrome.
 
@@ -20,4 +21,4 @@ other than the Jira site you're on, and it has no analytics or tracking.
 **Contact.** Questions about this policy:
 [open an issue](https://github.com/metalurgus/board-tweaks-for-jira/issues).
 
-*Last updated: October 15, 2026.*
+*Last updated: November 24, 2026.*
