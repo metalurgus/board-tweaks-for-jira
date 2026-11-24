@@ -339,3 +339,40 @@ html.jcf-compact-search .jcf-search-slot:not(:focus-within):has(input:placeholde
 [data-jcf-line][data-jcf-single] > * {
   flex: none !important;
 }
+
+/* Compact cards (cards.js). Jira's card: content grid > [summary row,
+   (field rows...), key row]. Matched by structure: the class names are
+   hashed and change with every Jira release. Cards get 25-30% shorter. */
+html.jcf-compact-cards [data-testid="board.content.cell.card"] > div > div:last-child {
+  padding-bottom: 4px !important;
+}
+
+html.jcf-compact-cards [data-testid="board.content.cell.card"] > div > div:last-child > div {
+  padding-inline: 10px !important;
+}
+
+/* Summary row: 12px/8px around the title in Jira. */
+html.jcf-compact-cards [data-testid="board.content.cell.card"] > div > div:last-child > div:first-child {
+  margin: 6px 0 2px !important;
+}
+
+/* Field rows (fix version, parent, ...): 8px apart in Jira. */
+html.jcf-compact-cards [data-testid="board.content.cell.card"] > div > div:last-child > div:not(:first-child):not(:last-child) {
+  margin-bottom: 4px !important;
+}
+
+/* Titles clamp at 2 lines instead of 3. */
+html.jcf-compact-cards [data-testid="board.content.cell.card"] > div > div:last-child > div:first-child > div:first-child {
+  -webkit-line-clamp: 2 !important;
+}
+
+/* Key row: priority, estimate and avatar at 3/4 size (the 28px avatar set
+   the row's height). */
+html.jcf-compact-cards [data-testid="board.content.cell.card"] > div > div:last-child > div:last-child:not(:first-child) {
+  min-height: 0 !important;
+  height: auto !important;
+}
+
+html.jcf-compact-cards [data-testid="board.content.cell.card"] > div > div:last-child > div:last-child:not(:first-child) > div:last-child {
+  zoom: 0.75;
+}

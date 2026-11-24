@@ -37,6 +37,7 @@ FEATURES
 • One line or wrapped – keep the buttons on one line and scroll sideways (the mouse wheel works), or let them wrap.
 • Compact search – "Search board" shrinks to an icon until you click it.
 • Compact toolbar – the board's icon buttons (Sprint details, View settings, …) move into the ••• menu.
+• Compact cards – less padding, titles up to two lines and smaller avatars, so about a third more cards fit on screen.
 • Adjustable button text size.
 
 Everything can be switched on and off from the extension's popup, and it works with any Jira language.

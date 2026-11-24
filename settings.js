@@ -9,6 +9,7 @@
     compactToolbar: false,
     singleRow: true,
     compactSearch: true,
+    compactCards: false,
   };
   const MIN_FONT_SIZE = 9;
   const MAX_FONT_SIZE = 20;
@@ -24,6 +25,7 @@
     compactToolbar: raw.compactToolbar === true,
     singleRow: raw.singleRow !== false,
     compactSearch: raw.compactSearch !== false,
+    compactCards: raw.compactCards === true,
   });
 
   globalThis.jcfSettings = {

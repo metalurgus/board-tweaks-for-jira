@@ -29,6 +29,8 @@ board toolbar and search get out of the way.
 - **Compact search.** *Search board* shrinks to an icon until you click it.
 - **Compact toolbar.** The board's icon buttons (Sprint details, View
   settings, …) move into the ••• menu.
+- **Compact cards.** Less padding, titles up to two lines and smaller avatars,
+  so about a third more cards fit on screen.
 - **Adjustable text size** for the buttons.
 
 Everything can be switched on and off from the extension's popup. It works with

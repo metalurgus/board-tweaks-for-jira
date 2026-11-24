@@ -22,6 +22,7 @@
   const compactToolbarInput = document.getElementById('compact-toolbar');
   const singleRowInput = document.getElementById('single-row');
   const compactSearchInput = document.getElementById('compact-search');
+  const compactCardsInput = document.getElementById('compact-cards');
   const sizeInput = document.getElementById('size');
   const sizeDown = document.getElementById('size-down');
   const sizeUp = document.getElementById('size-up');
@@ -37,6 +38,7 @@
     compactToolbarInput.checked = settings.compactToolbar;
     singleRowInput.checked = settings.singleRow;
     compactSearchInput.checked = settings.compactSearch;
+    compactCardsInput.checked = settings.compactCards;
     sizeInput.value = String(settings.fontSize);
     sizeDown.disabled = settings.fontSize <= MIN_FONT_SIZE;
     sizeUp.disabled = settings.fontSize >= MAX_FONT_SIZE;
@@ -55,6 +57,9 @@
   singleRowInput.addEventListener('change', () => update({ singleRow: singleRowInput.checked }));
   compactSearchInput.addEventListener('change', () =>
     update({ compactSearch: compactSearchInput.checked })
+  );
+  compactCardsInput.addEventListener('change', () =>
+    update({ compactCards: compactCardsInput.checked })
   );
   compactToolbarInput.addEventListener('change', () =>
     update({ compactToolbar: compactToolbarInput.checked })

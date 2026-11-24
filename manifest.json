@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Board Tweaks for Jira",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Shows Jira board quick filters as one-click toggle buttons, and makes the board toolbar and search more compact.",
   "icons": {
     "16": "icons/icon16.png",
@@ -21,7 +21,7 @@
   "content_scripts": [
     {
       "matches": ["https://*.atlassian.net/*"],
-      "js": ["settings.js", "content.js", "toolbar.js"],
+      "js": ["settings.js", "content.js", "toolbar.js", "cards.js"],
       "css": ["content.css"],
       "run_at": "document_idle"
     }
