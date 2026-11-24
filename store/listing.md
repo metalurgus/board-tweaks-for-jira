@@ -32,7 +32,7 @@ Filter your Jira Cloud board in one click.
 Board Tweaks for Jira turns the board's "Custom filters" dropdown into a row of toggle buttons right in the toolbar, so switching filters no longer takes three clicks.
 
 FEATURES
-• Quick filters as buttons – every filter from the board's Custom filters dropdown becomes a button you can toggle with one click. Selected filters are highlighted and stay in sync with Jira, whichever way you change them.
+• Quick filters as buttons – every filter from the board's Custom filters dropdown becomes a button you can toggle with one click. Selected filters are highlighted and stay in sync with Jira, whichever way you change them. Where Jira already shows its own line of filter buttons again, the extension keeps those and applies the tweaks below to them.
 • Separators – name a quick filter "|" or "—" and it's drawn as a divider, so you can group related filters.
 • One line or wrapped – keep the buttons on one line and scroll sideways (the mouse wheel works), or let them wrap.
 • Compact search – "Search board" shrinks to an icon until you click it.

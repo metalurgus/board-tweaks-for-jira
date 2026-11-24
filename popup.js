@@ -68,4 +68,24 @@
   });
 
   render();
+  showBoardUi();
+
+  // Jira is bringing back its own line of filter buttons, board by board.
+  // Where the open board already has it, there is no dropdown to turn into
+  // buttons, so that switch is greyed out. Any other page (or no answer,
+  // e.g. a tab opened before the extension was loaded) leaves it as is.
+  async function showBoardUi() {
+    let ui = null;
+    try {
+      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+      if (tab?.id !== undefined) ({ ui } = (await chrome.tabs.sendMessage(tab.id, { type: 'jcf-get-ui' })) ?? {});
+    } catch {
+      return; // no content script in this tab
+    }
+    if (ui !== 'line') return;
+    expandedInput.disabled = true;
+    expandedInput.closest('.row').classList.add('unavailable');
+    document.getElementById('expanded-hint').textContent =
+      'Jira shows its own filter buttons on this board';
+  }
 })();

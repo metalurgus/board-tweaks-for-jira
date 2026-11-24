@@ -19,6 +19,9 @@ board toolbar and search get out of the way.
   dropdown shows up as a button you can toggle with one click. Selected ones are
   highlighted, and they stay in sync with Jira when you change filters another
   way (the dropdown, *Clear filters*, the back button, a shared link).
+  Jira is bringing its own line of filter buttons back, site by site; where a
+  board already has it, the extension leaves those buttons in place and
+  applies the tweaks below to them instead.
 - **Separators.** Name a quick filter `|` or `—` and it's drawn as a divider,
   so you can group related filters.
 - **One line or wrapped.** Keep the buttons on one line and scroll sideways

@@ -1,6 +1,12 @@
 // Renders a board's quick filters (Jira's "Custom filters" dropdown) as a row
 // of toggle chips.
 //
+// Jira is rolling back to a line of its own filter buttons, and not everyone
+// has it yet, so each page is checked for which one it shows. On the line we
+// don't add chips: we restyle Jira's buttons (text size, "|" separators) and,
+// in single-row mode, fit the line into the toolbar row with sideways
+// scrolling.
+//
 // The filters come from Jira's REST API and their on/off state from the URL,
 // which carries the selected filters' JQL. Jira keeps the filter state inside
 // its own React components though, so the chips don't apply filters
@@ -19,6 +25,15 @@
   const BUSY_CLASS = 'jcf-busy';
   const LOG_PREFIX = '[jira-custom-filters]';
   const FILL_CLASS = 'jcf-fill-toolbar'; // on Jira's filter area in single-row mode
+  // Jira's own filter line is tagged with data attributes rather than classes:
+  // React rewrites className whenever it re-renders an element.
+  const LINE_ATTR = 'data-jcf-line'; // the line of filter buttons
+  const ROW_ATTR = 'data-jcf-row'; // the toolbar row holding it
+  const HEAD_ATTR = 'data-jcf-head'; // the filter controls ahead of the line
+  const TAIL_ATTR = 'data-jcf-tail'; // toolbar items that go after the line
+  const SEP_ATTR = 'data-jcf-sep'; // a "|" filter's item in the line
+  const SINGLE_ATTR = 'data-jcf-single'; // on line and row in single-row mode
+  const MAX_LINE_DEPTH = 3; // levels from a filter button up to the line
   // Jira lazy-loads the dropdown's code on first open, which can take a few
   // seconds while the rest of the board is still booting.
   const MENU_OPEN_TIMEOUT = 8000;
@@ -29,16 +44,41 @@
   let settings = null; // from the popup, see settings.js
   let anchor = null; // Jira's wrapper around the "Custom filters" button
   let bar = null;
+  let line = null; // Jira's own line of filter buttons, when the board has one
   let queue = Promise.resolve();
   let lastSeenUrl = location.href;
 
   // --- DOM lookups ---------------------------------------------------------
 
+  // Jira's filter line: toggle buttons named after the board's quick filters
+  // (names the board's admins chose, so this doesn't depend on Jira's
+  // language). Each button sits in an item of its own inside the line.
+  function findLine() {
+    const names = new Set(filters.map((f) => f.name));
+    if (!names.size) return null;
+    const button = [...document.querySelectorAll('button[aria-pressed]')].find(
+      (b) => !b.closest('.jcf-bar') && names.has(b.textContent.trim())
+    );
+    if (!button) return null;
+    let el = button.parentElement;
+    for (let depth = 0; el && depth < MAX_LINE_DEPTH; depth++, el = el.parentElement) {
+      const items = [...el.children].filter((c) => c.querySelector('button[aria-pressed]'));
+      if (items.length > 1) return el;
+    }
+    // A board with a single filter: assume Jira's usual line > item > button.
+    return button.parentElement?.parentElement ?? null;
+  }
+
+  // Which UI this page shows: 'line', 'dropdown', or null (not known, or a
+  // board without quick filters).
+  const detectUi = () => (findLine() ? 'line' : findTrigger() ? 'dropdown' : null);
+
   // The dropdown's button is the first popup button after Jira's "Filter"
   // button (the assignee avatars before it are a fieldset). That only holds on
   // a board with quick filters: without them the next one is "Group".
   const findTrigger = () => {
-    if (!filters.length) return null;
+    // On the filter line's UI the next popup button is "Group".
+    if (!filters.length || line?.isConnected || findLine()) return null;
     const start =
       document.querySelector(FILTER_BUTTON_SELECTOR) || document.querySelector(SEARCH_FIELD_SELECTOR);
     if (!start) return null;
@@ -258,43 +298,126 @@
         return chip;
       })
     );
-    updateScrollFades();
+    updateScrollFades(bar);
   }
 
   // --- single-row mode: horizontal scrolling ----------------------------------
 
-  // Fades the edges that have more chips beyond them.
-  function updateScrollFades() {
-    if (!bar) return;
+  // Fades the edges that have more chips beyond them (CSS keys off data-jcf-fade).
+  function updateScrollFades(el) {
+    if (!el) return;
     const single = settings?.singleRow;
-    const max = bar.scrollWidth - bar.clientWidth;
-    bar.classList.toggle('jcf-fade-left', !!single && bar.scrollLeft > 1);
-    bar.classList.toggle('jcf-fade-right', !!single && bar.scrollLeft < max - 1);
+    const max = el.scrollWidth - el.clientWidth;
+    const fades = [];
+    if (single && el.scrollLeft > 1) fades.push('left');
+    if (single && el.scrollLeft < max - 1) fades.push('right');
+    if (fades.length) el.setAttribute('data-jcf-fade', fades.join(' '));
+    else el.removeAttribute('data-jcf-fade');
   }
 
   // Lets a plain mouse wheel scroll the row sideways.
-  function onBarWheel(e) {
-    if (!settings.singleRow || bar.scrollWidth <= bar.clientWidth) return;
+  function onRowWheel(e) {
+    const el = e.currentTarget;
+    if (!settings.singleRow || el.scrollWidth <= el.clientWidth) return;
     if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
-    bar.scrollLeft += e.deltaY;
+    el.scrollLeft += e.deltaY;
     e.preventDefault();
+  }
+
+  const onRowScroll = (e) => updateScrollFades(e.currentTarget);
+  const fadeObserver = new ResizeObserver((entries) => {
+    for (const entry of entries) updateScrollFades(entry.target);
+  });
+
+  // --- Jira's own filter line -----------------------------------------------------
+
+  // Tags the line, its row and its "|" items for content.css, and follows the
+  // settings. Called again on every DOM change, so it re-tags whatever React
+  // re-rendered.
+  function applyLine(next) {
+    if (line !== next) {
+      releaseLine();
+      line = next;
+      line.setAttribute(LINE_ATTR, '');
+      line.addEventListener('wheel', onRowWheel, { passive: false });
+      line.addEventListener('scroll', onRowScroll, { passive: true });
+      fadeObserver.observe(line);
+    }
+    const row = line.parentElement;
+    const single = settings.singleRow;
+    line.toggleAttribute(SINGLE_ATTR, single);
+    line.style.setProperty('--jcf-font-size', `${settings.fontSize}px`);
+    if (row) {
+      row.setAttribute(ROW_ATTR, '');
+      row.toggleAttribute(SINGLE_ATTR, single);
+      // The filter controls (search first) stay ahead of the line; the rest
+      // (sprint picker, icons, •••) go after it.
+      for (const child of row.children) {
+        const head = !!child.querySelector(SEARCH_FIELD_SELECTOR);
+        child.toggleAttribute(HEAD_ATTR, head);
+        child.toggleAttribute(TAIL_ATTR, child !== line && !head);
+      }
+    }
+    for (const item of line.children) {
+      const button = item.querySelector('button');
+      const sep = !!button && isSeparator(button.textContent.trim());
+      if (item.hasAttribute(SEP_ATTR) === sep) continue;
+      item.toggleAttribute(SEP_ATTR, sep);
+      // A separator is only a divider: no focus, nothing for screen readers.
+      if (sep) {
+        item.setAttribute('aria-hidden', 'true');
+        button.tabIndex = -1;
+      } else {
+        item.removeAttribute('aria-hidden');
+        button?.removeAttribute('tabindex');
+      }
+    }
+    updateScrollFades(line);
+  }
+
+  function releaseLine() {
+    if (!line) return;
+    line.removeEventListener('wheel', onRowWheel);
+    line.removeEventListener('scroll', onRowScroll);
+    fadeObserver.unobserve(line);
+    const row = line.parentElement;
+    for (const el of [line, row, ...(row?.children ?? []), ...line.children]) {
+      if (!el) continue;
+      for (const attr of [LINE_ATTR, ROW_ATTR, HEAD_ATTR, TAIL_ATTR, SINGLE_ATTR, 'data-jcf-fade']) el.removeAttribute(attr);
+      if (el.hasAttribute(SEP_ATTR)) {
+        el.removeAttribute(SEP_ATTR);
+        el.removeAttribute('aria-hidden');
+        el.querySelector('button')?.removeAttribute('tabindex');
+      }
+    }
+    line.style.removeProperty('--jcf-font-size');
+    line = null;
   }
 
   // --- settings from the popup ------------------------------------------------
 
   function applySettings() {
+    if (line?.isConnected) applyLine(line);
     if (!anchor || !bar) return;
     anchor.classList.toggle('jcf-hidden-trigger', settings.expanded);
     bar.hidden = !settings.expanded;
     bar.style.setProperty('--jcf-font-size', `${settings.fontSize}px`);
     bar.classList.toggle('jcf-single-row', settings.singleRow);
     bar.parentElement?.classList.toggle(FILL_CLASS, settings.singleRow && settings.expanded);
-    updateScrollFades();
+    updateScrollFades(bar);
   }
 
-  // Puts the bar next to the dropdown's button, or takes it out of the page
-  // (giving Jira its button back) on a board without quick filters.
+  // On Jira's filter line, restyles that. Otherwise puts the bar next to the
+  // dropdown's button, or takes it out of the page (giving Jira its button
+  // back) on a board without quick filters.
   function mount() {
+    const nextLine = findLine();
+    if (nextLine) {
+      unmount();
+      applyLine(nextLine);
+      return;
+    }
+    releaseLine();
     const trigger = findTrigger();
     if (!trigger) {
       unmount();
@@ -308,9 +431,9 @@
       bar.className = 'jcf-bar';
       bar.setAttribute('role', 'group');
       bar.setAttribute('aria-label', 'Custom filters');
-      bar.addEventListener('wheel', onBarWheel, { passive: false });
-      bar.addEventListener('scroll', updateScrollFades, { passive: true });
-      new ResizeObserver(updateScrollFades).observe(bar);
+      bar.addEventListener('wheel', onRowWheel, { passive: false });
+      bar.addEventListener('scroll', onRowScroll, { passive: true });
+      fadeObserver.observe(bar);
     }
     if (anchor && anchor !== wrapper) anchor.classList.remove('jcf-hidden-trigger');
     if (bar.parentElement && bar.parentElement !== wrapper.parentElement) {
@@ -347,6 +470,11 @@
         mount();
       }, 100);
     }).observe(document.body, { childList: true, subtree: true });
+
+    // The popup asks which UI the page shows, to grey out what doesn't apply.
+    chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+      if (message?.type === 'jcf-get-ui') sendResponse({ ui: detectUi() });
+    });
 
     // Jira is a SPA: switching boards or filters changes the URL without
     // reloading, so re-read it whenever that happens.

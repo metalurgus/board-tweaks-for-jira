@@ -35,24 +35,26 @@
   const label = (button) => button.textContent.trim();
 
   // The toolbar row starts with the filter controls (search field first) and
-  // ends with the group of icons, whose last button is •••. Found by structure
-  // rather than by label, since Jira translates those. The ••• button's
-  // wrapper is its ancestor in the group; its siblings are the icons we tuck away.
+  // has a group of icons whose last button is ••• (followed, on boards with
+  // Jira's own filter line, by that line). Found by structure rather than by
+  // label, since Jira translates those. The ••• button's wrapper is its
+  // ancestor in the group; its siblings are the icons we tuck away.
   function findToolbar() {
     const search = document.querySelector(SEARCH_FIELD_SELECTOR);
     let row = search?.parentElement;
     for (let depth = 0; row && depth < MAX_TOOLBAR_DEPTH; depth++, row = row.parentElement) {
-      const group = row.lastElementChild;
-      if (group.contains(search)) continue;
-      const buttons = [...group.querySelectorAll('button')].filter((b) => {
-        const popup = b.closest(POPUP_SELECTOR);
-        return !popup || !group.contains(popup);
-      });
-      const more = buttons.at(-1);
-      if (buttons.length < 2 || more.getAttribute('aria-haspopup') !== 'true') continue;
-      let wrapper = more;
-      while (wrapper.parentElement !== group) wrapper = wrapper.parentElement;
-      return { more, wrapper, group };
+      for (const group of [...row.children].reverse()) {
+        if (group.contains(search)) break;
+        const buttons = [...group.querySelectorAll('button')].filter((b) => {
+          const popup = b.closest(POPUP_SELECTOR);
+          return !popup || !group.contains(popup);
+        });
+        const more = buttons.at(-1);
+        if (buttons.length < 2 || more.getAttribute('aria-haspopup') !== 'true') continue;
+        let wrapper = more;
+        while (wrapper.parentElement !== group) wrapper = wrapper.parentElement;
+        return { more, wrapper, group };
+      }
     }
     return null;
   }

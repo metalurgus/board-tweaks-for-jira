@@ -62,15 +62,17 @@ html.jcf-busy [role="menu"]:has([role="listbox"][aria-multiselectable="true"]) {
   flex: none;
 }
 
-.jcf-bar.jcf-fade-left {
+/* Fades on the edges with more filters beyond them (content.js sets
+   data-jcf-fade on our bar or on Jira's filter line). */
+[data-jcf-fade="left"] {
   mask-image: linear-gradient(to right, transparent, #000 32px);
 }
 
-.jcf-bar.jcf-fade-right {
+[data-jcf-fade="right"] {
   mask-image: linear-gradient(to left, transparent, #000 32px);
 }
 
-.jcf-bar.jcf-fade-left.jcf-fade-right {
+[data-jcf-fade="left right"] {
   mask-image: linear-gradient(to right, transparent, #000 32px, #000 calc(100% - 32px), transparent);
 }
 
@@ -267,4 +269,73 @@ html.jcf-compact-search .jcf-search-slot:not(:focus-within):has(input:placeholde
 .jcf-chip:focus-visible {
   outline: 2px solid var(--ds-border-focused, #388bff);
   outline-offset: 2px;
+}
+
+/* Jira's own filter line (content.js tags it with data attributes, since
+   React rewrites class names). Text size: --jcf-font-size, with height and
+   padding following it as on our chips; 14px gives Jira's 32px buttons. */
+[data-jcf-line] > * > button {
+  height: calc(var(--jcf-font-size, 14px) * 2 + 4px) !important;
+  padding-block: 0 !important;
+  padding-inline: calc(var(--jcf-font-size, 14px) * 6 / 7) !important;
+  font-size: var(--jcf-font-size, 14px) !important;
+  align-items: center !important;
+}
+
+[data-jcf-line] > * > button > span {
+  font-size: inherit !important;
+  line-height: calc(var(--jcf-font-size, 14px) * 10 / 7) !important;
+}
+
+/* A "|" filter becomes a thin divider; its button stays in the DOM, unseen. */
+[data-jcf-line] > [data-jcf-sep] {
+  flex: none !important;
+  align-self: center !important;
+  width: 1px !important;
+  height: calc(var(--jcf-font-size, 14px) * 1.4) !important;
+  overflow: hidden !important;
+  background: var(--ds-border, #091e4224) !important;
+}
+
+[data-jcf-line] > [data-jcf-sep] > * {
+  display: none !important;
+}
+
+/* Single-row mode: Jira gives the line a row of its own (flex-basis 100%)
+   and wraps it. Instead, keep the toolbar on one row with the line between
+   the filter controls and the icons, taking what's left and scrolling
+   sideways. Same focus-outline room as .jcf-bar.jcf-single-row. */
+[data-jcf-row][data-jcf-single] {
+  flex-wrap: nowrap !important;
+}
+
+/* Jira lets the filter controls grow to push the icons to the far right,
+   which would take half the free space from the line. */
+[data-jcf-row][data-jcf-single] > [data-jcf-head] {
+  flex: none !important;
+}
+
+[data-jcf-row][data-jcf-single] > [data-jcf-tail] {
+  flex: none !important;
+  order: 2 !important;
+}
+
+[data-jcf-line][data-jcf-single] {
+  order: 1 !important;
+  flex: 1 1 0 !important;
+  flex-wrap: nowrap !important;
+  min-width: 0 !important;
+  margin-block: -4px !important;
+  padding-block: 4px !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  scrollbar-width: none !important;
+}
+
+[data-jcf-line][data-jcf-single]::-webkit-scrollbar {
+  display: none;
+}
+
+[data-jcf-line][data-jcf-single] > * {
+  flex: none !important;
 }

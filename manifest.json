@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Board Tweaks for Jira",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Shows Jira board quick filters as one-click toggle buttons, and makes the board toolbar and search more compact.",
   "icons": {
     "16": "icons/icon16.png",
