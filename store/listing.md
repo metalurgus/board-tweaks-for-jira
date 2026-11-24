@@ -14,8 +14,10 @@ git archive --format=zip -o board-tweaks-for-jira.zip HEAD manifest.json setting
 (Don't use Windows PowerShell's `Compress-Archive`: it writes `icons\…` paths
 with backslashes, which the store doesn't read as folders.)
 
-Bump `version` in `manifest.json` before every upload; the store rejects a
-version it has already seen. Check the list above against `content_scripts`
+Bump `version` in `manifest.json` once per upload (not per change); the
+store rejects a version it has already seen. After the upload, tag the
+commit (`git tag v<version>`, push the tag) and publish a GitHub release
+with that version's section of `CHANGELOG.md`. Check the list above against `content_scripts`
 in `manifest.json` whenever a script is added.
 
 ## Store listing tab
@@ -47,6 +49,9 @@ FEATURES
 
 Everything can be switched on and off from the extension's popup, and it works with any Jira language.
 
+NEW IN 1.4
+Saved filter sets, number-key shortcuts, compact cards, column width and card colours, and support for Jira's own line of filter buttons. Full list: https://github.com/metalurgus/board-tweaks-for-jira/blob/main/CHANGELOG.md
+
 REQUIREMENTS
 Jira Cloud (*.atlassian.net). Quick filters are set up per board in Board settings → Custom filters on company-managed boards; team-managed boards don't have them, so there only the toolbar and search tweaks apply.
 
@@ -62,7 +67,10 @@ Not affiliated with or endorsed by Atlassian. Jira is a trademark of Atlassian.
 
 **Graphic assets:**
 - Store icon: `icons/icon128.png`
-- Screenshots (1280×800): `store/screenshot-1.png`, `store/screenshot-2.png`
+- Screenshots (1280×800), in this order: `store/screenshot-1.png` (filters on
+  one line), `store/screenshot-2.png` (saved filter sets),
+  `store/screenshot-3.png` (compact, coloured cards and column width),
+  `store/screenshot-4.png` (the settings popup)
 - Small promo tile (440×280): `store/promo-small-440x280.png`
 - Marquee promo tile (1400×560, optional): `store/marquee-1400x560.png`
 

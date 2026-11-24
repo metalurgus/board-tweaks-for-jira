@@ -46,7 +46,8 @@ cards get out of the way.
 - **Adjustable text size** for the buttons.
 
 Everything can be switched on and off from the extension's popup. It works with
-any Jira language.
+any Jira language. See [CHANGELOG.md](CHANGELOG.md) for what changed in each
+version.
 
 ## Requirements
 
