@@ -8,7 +8,6 @@ toolbar, saved filter sets apply in one click, and the toolbar, search and
 cards get out of the way.
 
 [![Chrome Web Store version](https://badgen.net/chrome-web-store/v/lclpdkflnpanakdcopkkafkdlklegaoh)](https://chromewebstore.google.com/detail/board-tweaks-for-jira/lclpdkflnpanakdcopkkafkdlklegaoh)
-[![Installs](https://badgen.net/badge/installs/700%2B/blue)](https://chromewebstore.google.com/detail/board-tweaks-for-jira/lclpdkflnpanakdcopkkafkdlklegaoh)
 [![Chrome Web Store rating](https://badgen.net/chrome-web-store/rating/lclpdkflnpanakdcopkkafkdlklegaoh)](https://chromewebstore.google.com/detail/board-tweaks-for-jira/lclpdkflnpanakdcopkkafkdlklegaoh)
 
 <br clear="left">
