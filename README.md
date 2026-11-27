@@ -7,8 +7,8 @@ of the board on screen: your board's quick filters sit on one line in the
 toolbar, saved filter sets apply in one click, and the toolbar, search and
 cards get out of the way.
 
-[![Chrome Web Store version](https://img.shields.io/chrome-web-store/v/lclpdkflnpanakdcopkkafkdlklegaoh)](https://chromewebstore.google.com/detail/board-tweaks-for-jira/lclpdkflnpanakdcopkkafkdlklegaoh)
-[![Chrome Web Store users](https://img.shields.io/chrome-web-store/users/lclpdkflnpanakdcopkkafkdlklegaoh)](https://chromewebstore.google.com/detail/board-tweaks-for-jira/lclpdkflnpanakdcopkkafkdlklegaoh)
+[![Chrome Web Store version](https://badgen.net/chrome-web-store/v/lclpdkflnpanakdcopkkafkdlklegaoh)](https://chromewebstore.google.com/detail/board-tweaks-for-jira/lclpdkflnpanakdcopkkafkdlklegaoh)
+[![Chrome Web Store users](https://badgen.net/chrome-web-store/users/lclpdkflnpanakdcopkkafkdlklegaoh)](https://chromewebstore.google.com/detail/board-tweaks-for-jira/lclpdkflnpanakdcopkkafkdlklegaoh)
 
 <br clear="left">
 
