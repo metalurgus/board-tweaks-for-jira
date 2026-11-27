@@ -17,7 +17,9 @@ with backslashes, which the store doesn't read as folders.)
 Bump `version` in `manifest.json` once per upload (not per change); the
 store rejects a version it has already seen. After the upload, tag the
 commit (`git tag v<version>`, push the tag) and publish a GitHub release
-with that version's section of `CHANGELOG.md`. Check the list above against `content_scripts`
+with that version's section of `CHANGELOG.md`. Also update the installs
+badge in `README.md` (`badge/installs/700%2B`) to the rounded install count
+from the dashboard; the store doesn't publish installs, so it's set by hand. Check the list above against `content_scripts`
 in `manifest.json` whenever a script is added.
 
 ## Store listing tab
